@@ -517,12 +517,11 @@ void WarpLDA<MH>::writeInfo(std::string vocab_fname, std::string info, uint32_t 
 			}
 		}
 		std::sort(a.rbegin(), a.rend());
-		fou1 << k << "\t";
-		fou1 << ck[k] << "\t";
+		fou1 << "Topic #" << k << ':' << '\n';
 		for (auto &p : a)
 		{
 			std::string word = vocab.getWordById(p.second);
-			fou1 << '('<< p.first << ',' << word << ") ";
+            fou1 << word << '\t' << p.first << '\n';
 			fou2 << word << " ";
 		}
 		fou1 << std::endl;
