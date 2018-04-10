@@ -276,7 +276,7 @@ void WarpLDA<MH>::accept_w_propose_d()
 }
 
 template <unsigned MH>
-void WarpLDA<MH>::estimate(int _K, float _alpha, float _beta, int _niter, int _perperplexity_interval)
+void WarpLDA<MH>::estimate(int _K, float _alpha, float _beta, int _niter, int _perperplexity_interval, int neval, std::string fmodel, std::string vocab_fname, std::string info, uint32_t ntop)
 {
     this->K = _K;
     this->alpha = _alpha;
@@ -306,12 +306,13 @@ void WarpLDA<MH>::estimate(int _K, float _alpha, float _beta, int _niter, int _p
         if (eval_perplexity) printf(" perplexity %lf\n", ppl);
         else printf("\n");
 		fflush(stdout);
-        if (i > 0 && i % 1000 == 0) {
+        if (i > 0 && i % neval == 0) {
             std::string model_file_name;
             std::stringstream ss;
             ss << i;
-            model_file_name = "iter" + ss.str() + ".model";
+            model_file_name = fmodel + ".iter" + ss.str();
             this->storeModel(model_file_name);
+            this->writeInfo(vocab_fname, info + ".iter" + ss.str(), ntop);
         }
 	}
 }

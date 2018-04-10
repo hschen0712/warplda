@@ -16,7 +16,7 @@ class WarpLDA : public LDA
 {
 public:
     WarpLDA();
-    virtual void estimate(int K, float alpha, float beta, int niter, int perplexity_interval) override;
+    virtual void estimate(int K, float alpha, float beta, int niter, int perplexity_interval, int neval, std::string fmodel, std::string vocab_fname, std::string info, uint32_t ntop) override;
     virtual void inference(int niter, int perplexity_interval) override;
     virtual void loadModel(std::string prefix) override;
     virtual void storeModel(std::string prefix) override;

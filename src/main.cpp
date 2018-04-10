@@ -6,6 +6,7 @@
 
 DEFINE_string(prefix, "./prefix", "prefix of result files");
 DEFINE_int32(niter, 10, "number of iterations");
+DEFINE_int32(neval, 100, "save model every neval iterations");
 DEFINE_int32(k, 1000, "number of topics");
 DEFINE_double(alpha, 50, "sum of alpha");
 DEFINE_double(beta, 0.01, "beta");
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
     lda->loadBinary(FLAGS_bin);
     if (FLAGS_estimate)
     {
-        lda->estimate(FLAGS_k, FLAGS_alpha / FLAGS_k, FLAGS_beta, FLAGS_niter, FLAGS_perplexity);
+        lda->estimate(FLAGS_k, FLAGS_alpha / FLAGS_k, FLAGS_beta, FLAGS_niter, FLAGS_perplexity, FLAGS_neval, FLAGS_model, FLAGS_vocab, FLAGS_info, FLAGS_ntop);
         if (FLAGS_dumpmodel)
         {
             std::cout << "Dump model " << FLAGS_model << std::endl;
