@@ -6,6 +6,9 @@
 #include "clock.hpp"
 #include <exception>
 #include <atomic>
+#include <ctime>
+#include <string>
+#include <sstream>
 
 const int LOAD_FACTOR = 4;
 
@@ -296,11 +299,20 @@ void WarpLDA<MH>::estimate(int _K, float _alpha, float _beta, int _niter, int _p
         if (eval_perplexity)
             ppl = perplexity();
 
-        double tm = clk.timeElapsed();
-		printf("Iteration %d, %f s, %.2f Mtokens/s, log_likelihood (per token) %lf", i, tm, (double)g.NE()/tm/1e6, total_log_likelihood/g.NE());
+        double time_elapsed = clk.timeElapsed();
+        time_t cur_time = time(0);
+        struct tm * now = localtime( & cur_time );
+		printf("[%d-%d-%d %d:%d:%d] Iteration %d, %f s, %.2f Mtokens/s, log_likelihood (per token) %lf", now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour,now->tm_min,now->tm_sec, i, time_elapsed, (double)g.NE()/time_elapsed/1e6, total_log_likelihood/g.NE());
         if (eval_perplexity) printf(" perplexity %lf\n", ppl);
         else printf("\n");
 		fflush(stdout);
+        if (i > 0 && i % 1000 == 0) {
+            std::string model_file_name;
+            std::stringstream ss;
+            ss << i;
+            model_file_name = "iter" + ss.str() + ".model";
+            this->storeModel(model_file_name);
+        }
 	}
 }
 
